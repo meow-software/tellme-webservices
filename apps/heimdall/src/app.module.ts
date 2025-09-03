@@ -6,11 +6,16 @@ import { ProxyController } from './controllers/proxy.controller';
 import { DynamicRateLimitGuard } from './guards/dynamic-rate-limit.guard';
 import { RedisService } from './redis/redis.service';
 import { AuthModule } from './auth/auth.module';
+import * as path from 'path'; 
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: [
+        path.resolve(__dirname, '../../../.env'), // turbo .env
+        path.resolve(__dirname, './.env'), // local .env
+      ]
     }),  
     AuthModule,
   ],

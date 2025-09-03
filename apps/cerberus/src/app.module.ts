@@ -4,12 +4,19 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { RedisModule } from './redis/redis.module';
 import { ConfigModule } from '@nestjs/config';
+import * as path from 'path'; 
 
 @Module({
   imports: [
     AuthModule,
     RedisModule,
-    ConfigModule.forRoot()
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: [
+        path.resolve(__dirname, '../../../.env'), // turbo .env
+        path.resolve(__dirname, './.env'), // local .env
+      ]
+    }),  
   ],
   controllers: [AppController],
   providers: [AppService],

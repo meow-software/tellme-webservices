@@ -11,10 +11,17 @@ import { RedisEventBus } from './event-bus/redis-event-bus';
 import { EventBusModule } from './event-bus/event-bus.module';
 import { ResponseFormatterService } from './services/response-formatter.service';
 import { ResponseFormatterInterceptor } from './interceptor/response-formatter.interceptor';
+import * as path from 'path'; 
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: [
+        path.resolve(__dirname, '../../../.env'), // turbo .env
+        path.resolve(__dirname, './.env'), // local .env
+      ]
+    }),  
     UsersModule,
     AuthModule,
     EventBusModule
