@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ResponseFormatter } from 'src/lib';
+import { ResponseFormatter } from '../interfaces';
 
 @Injectable()
 export class ResponseFormatterService extends ResponseFormatter {

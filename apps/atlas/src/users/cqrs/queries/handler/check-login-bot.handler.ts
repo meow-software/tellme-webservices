@@ -1,8 +1,7 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { CheckLoginBotQuery } from '../check-login-bot.query';
-import { PrismaService } from 'src/services/prisma.service';
 import { UnauthorizedException } from '@nestjs/common';
-import { SnowflakeService } from 'src/services/snowflake.service';
+import {SnowflakeService, PrismaService} from 'src/lib';
 
 @QueryHandler(CheckLoginBotQuery)
 export class CheckLoginBotHandler implements IQueryHandler<CheckLoginBotQuery> {

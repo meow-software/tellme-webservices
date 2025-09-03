@@ -1,11 +1,9 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { UpdateUserCommand } from '../update-user.command';
-import { PrismaService } from 'src/services/prisma.service';
-import { RedisService } from 'src/services/redis.service';
 import { Inject } from '@nestjs/common';
-import * as eventBusInterface from 'src/lib';
-import { SnowflakeService } from 'src/services/snowflake.service';
-import { EVENT_BUS } from 'src/event-bus/event-bus.module';
+import type { IEventBus } from 'src/lib';
+import {SnowflakeService, PrismaService, EVENT_BUS} from 'src/lib';
+import { AtlasRedisService } from 'src/services/redis.service';
 
 @CommandHandler(UpdateUserCommand)
 export class UpdateUserHandler implements ICommandHandler<UpdateUserCommand> {
@@ -13,8 +11,8 @@ export class UpdateUserHandler implements ICommandHandler<UpdateUserCommand> {
   constructor(
     private prisma: PrismaService,
     private snowflake: SnowflakeService,
-    private redis: RedisService,
-    @Inject(EVENT_BUS) private eventBus: eventBusInterface.IEventBus,
+    private redis: AtlasRedisService,
+    @Inject(EVENT_BUS) private eventBus: IEventBus,
   ) {}
 
   async execute(command: UpdateUserCommand) {

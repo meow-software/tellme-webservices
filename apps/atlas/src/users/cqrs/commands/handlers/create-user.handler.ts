@@ -1,19 +1,17 @@
 
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { PrismaService } from 'src/services/prisma.service';
 import { CreateUserCommand } from '../create-user.command';
-import * as eventBusInterface from 'src/lib';
-import { SnowflakeService } from 'src/services/snowflake.service';
-import { EVENT_BUS } from 'src/event-bus/event-bus.module';
 import { ConflictException, Inject } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
+import type { IEventBus } from 'src/lib';
+import {SnowflakeService, PrismaService, EVENT_BUS} from 'src/lib';
 
 @CommandHandler(CreateUserCommand)
 export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
   constructor(
     private prisma: PrismaService,
     private snowflake: SnowflakeService,
-    @Inject(EVENT_BUS) private eventBus: eventBusInterface.IEventBus
+    @Inject(EVENT_BUS) private eventBus: IEventBus
   ) { }
 
   async execute(command: CreateUserCommand) {

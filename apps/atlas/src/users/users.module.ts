@@ -1,30 +1,27 @@
 import { Module } from '@nestjs/common';
 import { UsersController } from './users.controller';
-import { PrismaService } from 'src/services/prisma.service';
-import { RedisService } from 'src/services/redis.service';
 import { UpdateUserHandler } from './cqrs/commands/handlers/update-user.handler';
 import { GetUserHandler } from './cqrs/queries/handler/get-user.handler';
-import { SnowflakeService } from 'src/services/snowflake.service';
-import { EventBusModule } from 'src/event-bus/event-bus.module';
 import { CqrsModule } from '@nestjs/cqrs';
 import { CreateUserHandler } from './cqrs/commands/handlers/create-user.handler';
 import { DeleteUserHandler } from './cqrs/commands/handlers/delete-user.handler';
 import { CheckLoginBotHandler } from './cqrs/queries/handler/check-login-bot.handler';
 import { CheckLoginHandler } from './cqrs/queries/handler/check-login.handler';
 import { SearchUsersHandler } from './cqrs/queries/handler/search-users.handler';
-import { ResponseFormatterService } from 'src/services/response-formatter.service';
+import { EventBusModule, PrismaService, ResponseFormatterService, SnowflakeService } from 'src/lib';
+import { AtlasRedisService } from 'src/services/redis.service';
 
 @Module({
   imports: [
     CqrsModule, 
-    EventBusModule
+    EventBusModule.register(AtlasRedisService),
   ],
   controllers: [UsersController],
   providers: [
     PrismaService,
-    RedisService,
-    SnowflakeService,
-    ResponseFormatterService,
+    // AtlasRedisService,
+    // SnowflakeService,
+    // ResponseFormatterService,
     // CQRS
     // Commands
     CreateUserHandler,

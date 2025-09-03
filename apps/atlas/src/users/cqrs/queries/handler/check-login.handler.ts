@@ -1,8 +1,8 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import * as bcrypt from 'bcrypt';
 import { CheckLoginQuery } from '../check-login.query';
-import { PrismaService } from 'src/services/prisma.service';
 import { UnauthorizedException } from '@nestjs/common';
+import { PrismaService } from 'src/lib';
 
 @QueryHandler(CheckLoginQuery)
 export class CheckLoginHandler implements IQueryHandler<CheckLoginQuery> {

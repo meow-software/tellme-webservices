@@ -8,14 +8,21 @@ import Redis from 'ioredis';
  * - `onModuleInit`: called when the module is initialized.
  * - `onModuleDestroy`: called when the module is destroyed.
  *
- * Provides access to the Redis client instance.
+ * Provides access to the Redis client instance, a subscriber for Pub/Sub,
+ * and helper methods to publish or listen for messages.
  */
 export abstract class AbstractRedis implements OnModuleInit, OnModuleDestroy {
   /**
-   * @param ioredis - The Redis client instance (ioredis)
+   * @param subscriber - The Redis client instance use for subscribing to pub/sub channels
    */
-  constructor(protected ioredis : Redis) {
-    
+  protected subscriber: Redis;
+  
+  /**
+   * @param client - The main Redis client instance (client) use for commands
+   */
+  constructor(protected client: Redis) {
+    // Init subscriber
+    this.subscriber = new Redis(client.options);
   }
 
 
@@ -32,14 +39,15 @@ export abstract class AbstractRedis implements OnModuleInit, OnModuleDestroy {
    * Ensures the Redis connection is properly closed.
    */
   async onModuleDestroy() {
-    await this.redis.quit();
+    await this.client.quit();
+    await this.subscriber.quit();
   }
 
   /**
    * Provides direct access to the underlying Redis client.
    */
   get redis(): Redis {
-    return this.ioredis;
+    return this.client;
   }
 
   /**
@@ -51,6 +59,14 @@ export abstract class AbstractRedis implements OnModuleInit, OnModuleDestroy {
   }
 
 
+  /**
+   * Returns the Redis client used for subscriptions.
+   *
+   * @returns Redis client for subscribing to channels
+   */
+  getSubscriber(): Redis {
+    return this.subscriber;
+  }
 
   /**
    * Stores a JSON-serializable value in Redis under the given key.
@@ -63,9 +79,9 @@ export abstract class AbstractRedis implements OnModuleInit, OnModuleDestroy {
   async setJSON(key: string, value: unknown, ttlSeconds?: number) {
     const payload = JSON.stringify(value);
     if (ttlSeconds && ttlSeconds > 0) {
-      await this.redis.set(key, payload, 'EX', ttlSeconds);
+      await this.client.set(key, payload, 'EX', ttlSeconds);
     } else {
-      await this.redis.set(key, payload);
+      await this.client.set(key, payload);
     }
   }
 
@@ -76,7 +92,7 @@ export abstract class AbstractRedis implements OnModuleInit, OnModuleDestroy {
    * @returns The parsed value, or null if the key does not exist
    */
   async getJSON<T = any>(key: string): Promise<T | null> {
-    const raw = await this.redis.get(key);
+    const raw = await this.client.get(key);
     return raw ? (JSON.parse(raw) as T) : null;
   }
 
@@ -86,7 +102,7 @@ export abstract class AbstractRedis implements OnModuleInit, OnModuleDestroy {
    * @param key - Redis key
    */
   async del(key: string) {
-    await this.redis.del(key);
+    await this.client.del(key);
   }
 
   /**
@@ -98,6 +114,25 @@ export abstract class AbstractRedis implements OnModuleInit, OnModuleDestroy {
    * @param ttlSeconds - Time-to-live in seconds
    */
   async setNX(key: string, value: string, ttlSeconds: number) {
-    await this.redis.set(key, value, 'EX', ttlSeconds, 'NX');
+    await this.client.set(key, value, 'EX', ttlSeconds, 'NX');
+  }
+
+  /**
+   * Publishes a message to a Redis channel.
+   *
+   * @param channel - Name of the Redis channel
+   * @param message - Message payload as a string
+   */
+  async publish(channel: string, message: string) {
+    await this.client.publish(channel, message);
+  }
+
+  /**
+   * Registers a callback for messages received on subscribed channels.
+   *
+   * @param callback - Function called with channel and message when a message is received
+   */
+  onMessage(callback: (channel: string, message: string) => void) {
+    this.subscriber.on('message', callback);
   }
 }

@@ -8,20 +8,18 @@ import { DeleteUserCommand } from './cqrs/commands/delete-user.command';
 import { CreateUserDto } from './dto/create-user.dto';
 import { CreateUserCommand } from './cqrs/commands/create-user.command';
 import { SearchUsersDto } from './dto/search-users.dto';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CheckLoginDto } from './dto/check-login.dto';
 import { CheckLoginBotDto } from './dto/check-login-bot.dto';
 import { CheckLoginBotQuery } from './cqrs/queries/check-login-bot.query';
 import { CheckLoginQuery } from './cqrs/queries/check-login.query';
-import { ResponseFormatterService } from 'src/services/response-formatter.service';
 import { GetUserDto } from './dto/get-user.dto';
+import { JwtAuthGuard } from 'src/lib';
 
 @Controller('users')
 export class UsersController {
     constructor(
         private commandBus: CommandBus,
         private queryBus: QueryBus,
-        private responseFormatter: ResponseFormatterService
     ) { }
     @Post()
     async create(@Body() dto: CreateUserDto) {

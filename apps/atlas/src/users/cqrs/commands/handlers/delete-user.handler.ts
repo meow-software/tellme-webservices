@@ -1,18 +1,16 @@
 
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { PrismaService } from 'src/services/prisma.service';
-import * as eventBusInterface from 'src/lib';
 import { DeleteUserCommand } from '../delete-user.command';
-import { SnowflakeService } from 'src/services/snowflake.service';
 import { Inject } from '@nestjs/common';
-import { EVENT_BUS } from 'src/event-bus/event-bus.module';
+import type { IEventBus } from 'src/lib';
+import {SnowflakeService, PrismaService, EVENT_BUS} from 'src/lib';
 
 @CommandHandler(DeleteUserCommand)
 export class DeleteUserHandler implements ICommandHandler<DeleteUserCommand> {
   constructor(
     private prisma: PrismaService, 
     private snowflake: SnowflakeService, 
-    @Inject(EVENT_BUS) private eventBus: eventBusInterface.IEventBus) {}
+    @Inject(EVENT_BUS) private eventBus: IEventBus) {}
 
   async execute(command: DeleteUserCommand) {
     const user = await this.prisma.user.delete({ where: { id: this.snowflake.toBigInt(command.id) } });

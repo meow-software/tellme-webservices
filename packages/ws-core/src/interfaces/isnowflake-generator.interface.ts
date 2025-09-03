@@ -94,6 +94,7 @@ export class SnowflakeGenerator extends AbstractSnowflakeGenerator {
      */
     constructor(workerId: number, epoch?: number) {
         super(workerId, epoch);  // Call the constructor of the abstract class
+        if (workerId <0 ) throw Error('workerId cannot be negative');
         this.initSnowflake();
     }
 
@@ -141,7 +142,7 @@ export class SnowflakeGenerator extends AbstractSnowflakeGenerator {
 
     /**
     * Extracts the data encoded in a snowflake.
-    * Classic Discord/Twitter format:
+    * Format:
     * - 41 bits = timestamp since epoch
     * - 10 bits = workerId
     * - 12 bits = increment (sequence)

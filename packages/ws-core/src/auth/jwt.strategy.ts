@@ -36,7 +36,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
    * It should return a value that will be attached to `req.user`.
    */
   async validate(payload: any) {
-    console.log('-- JwtStrategy active via Atlas');
     return payload;
   }
 }

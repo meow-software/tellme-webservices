@@ -1,7 +1,7 @@
 
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { SearchUsersQuery } from '../search-users.query';
-import { PrismaService } from 'src/services/prisma.service';
+import { PrismaService } from 'src/lib';
 
 @QueryHandler(SearchUsersQuery)
 export class SearchUsersHandler implements IQueryHandler<SearchUsersQuery> {
