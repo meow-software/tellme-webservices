@@ -1,0 +1,18 @@
+{
+  "name": "@tellme/ws-common",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npm run build --workspace=@tellme/ws-common", 
+    "devw": "powershell -Command \"Remove-Item -Recurse -Force ./dist\" && npm run build --workspace=@tellme/ws-common",
+    "devl": "rm -r ./dist/ && npm run build --workspace=@tellme/ws-common",
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}

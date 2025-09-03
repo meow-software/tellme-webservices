@@ -1,5 +1,5 @@
 {
-  "name": "Tellme-webservices",
+  "name": "tellme-webservices",
   "private": true,
   "scripts": {
     "build": "turbo run build",

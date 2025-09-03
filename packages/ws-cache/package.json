@@ -1,0 +1,18 @@
+{
+  "name": "@tellme/ws-cache",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npm run build --workspace=@tellme/ws-cache", 
+    "devw": "powershell -Command \"Remove-Item -Recurse -Force ./dist\" && npm run build --workspace=@tellme/ws-cache",
+    "devl": "rm -r ./dist/ && npm run build --workspace=@tellme/ws-cache",
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
