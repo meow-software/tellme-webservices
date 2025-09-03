@@ -1,7 +1,7 @@
 {
   "name": "@tellme/ws-core",
   "version": "1.0.0",
-  "description": "",
+  "description": "The Core package contains the fundamental building blocks of the TellMe backend ecosystem. It defines domain-agnostic contracts, interfaces, DTOs, constants, and base abstractions that can be shared across all services.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {

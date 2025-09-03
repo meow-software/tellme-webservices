@@ -12,9 +12,12 @@ import Redis from 'ioredis';
  */
 export abstract class AbstractRedis implements OnModuleInit, OnModuleDestroy {
   /**
-   * @param _redis - The Redis client instance (ioredis)
+   * @param ioredis - The Redis client instance (ioredis)
    */
-  constructor(protected _redis: Redis) {}
+  constructor(protected ioredis : Redis) {
+    
+  }
+
 
   /**
    * Lifecycle hook executed when the module is initialized.
@@ -36,7 +39,7 @@ export abstract class AbstractRedis implements OnModuleInit, OnModuleDestroy {
    * Provides direct access to the underlying Redis client.
    */
   get redis(): Redis {
-    return this._redis;
+    return this.ioredis;
   }
 
   /**
@@ -45,5 +48,56 @@ export abstract class AbstractRedis implements OnModuleInit, OnModuleDestroy {
    */
   getClient(): Redis {
     return this.redis;
+  }
+
+
+
+  /**
+   * Stores a JSON-serializable value in Redis under the given key.
+   * Optionally applies a TTL (time-to-live).
+   *
+   * @param key - Redis key
+   * @param value - Value to store (will be JSON.stringified)
+   * @param ttlSeconds - Optional TTL in seconds (if > 0, sets expiration)
+   */
+  async setJSON(key: string, value: unknown, ttlSeconds?: number) {
+    const payload = JSON.stringify(value);
+    if (ttlSeconds && ttlSeconds > 0) {
+      await this.redis.set(key, payload, 'EX', ttlSeconds);
+    } else {
+      await this.redis.set(key, payload);
+    }
+  }
+
+  /**
+   * Retrieves and parses a JSON value from Redis.
+   *
+   * @param key - Redis key
+   * @returns The parsed value, or null if the key does not exist
+   */
+  async getJSON<T = any>(key: string): Promise<T | null> {
+    const raw = await this.redis.get(key);
+    return raw ? (JSON.parse(raw) as T) : null;
+  }
+
+  /**
+   * Deletes a key from Redis.
+   *
+   * @param key - Redis key
+   */
+  async del(key: string) {
+    await this.redis.del(key);
+  }
+
+  /**
+   * Sets a value in Redis only if the key does not already exist (NX option).
+   * Automatically sets an expiration time (EX).
+   *
+   * @param key - Redis key
+   * @param value - Value to store
+   * @param ttlSeconds - Time-to-live in seconds
+   */
+  async setNX(key: string, value: string, ttlSeconds: number) {
+    await this.redis.set(key, value, 'EX', ttlSeconds, 'NX');
   }
 }

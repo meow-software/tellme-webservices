@@ -1,8 +1,9 @@
 {
   "name": "@tellme/ws-common",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "The Common package provides shared utilities and concrete implementations that multiple services can reuse.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "dev": "npm run build --workspace=@tellme/ws-common", 
     "devw": "powershell -Command \"Remove-Item -Recurse -Force ./dist\" && npm run build --workspace=@tellme/ws-common",

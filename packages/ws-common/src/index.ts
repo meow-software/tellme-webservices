@@ -1,1 +1,2 @@
-export * from './hello';
+export * from './proxy';
+export * from './event-bus';
