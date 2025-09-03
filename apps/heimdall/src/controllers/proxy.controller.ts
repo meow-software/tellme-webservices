@@ -5,20 +5,18 @@ import {
     Res,
     Next,
     NotFoundException,
-    Inject,
     CanActivate,
     Param,
     HttpStatus,
     HttpException,
 } from '@nestjs/common';
 import type { Request, Response, NextFunction } from 'express';
-import { createProxyMiddleware, Options } from 'http-proxy-middleware';
 import { routes } from '../lib/routes/routes.config';
 import { match as pathMatch, compile as pathCompile } from 'path-to-regexp';
 import { DynamicRateLimitGuard } from '../guards/dynamic-rate-limit.guard';
 import { ModuleRef } from '@nestjs/core';
-import { compileRoutes, GuardClass, RouteConfig, RouteGuardType } from 'src/lib/routes/routes';
-import { Proxy } from 'src/lib/proxy';
+import { compileRoutes, GuardClass, RouteConfig, RouteGuardType } from "src/lib";
+import { Proxy } from "src/lib";
 
 type CompiledRoute = {
     config: RouteConfig;
@@ -31,14 +29,6 @@ interface MatchResult {
     params: Record<string, string>;
     path: string;
     index: number;
-}
-
-interface ExtendedProxyOptions extends Options {
-    on?: {
-        proxyReq?: (proxyReq: any, req: any, res: any) => void;
-        proxyRes?: (proxyRes: any, req: any, res: any) => void;
-        error?: (err: any, req: any, res: any) => void;
-    };
 }
 
 @Controller('api')

@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { ProxyController } from './controllers/proxy.controller';
 import { DynamicRateLimitGuard } from './guards/dynamic-rate-limit.guard';
-import { RedisService } from './redis/redis.service';
+import { RedisService } from 'src/lib';
 import { AuthModule } from './auth/auth.module';
 import * as path from 'path'; 
 

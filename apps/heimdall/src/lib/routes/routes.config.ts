@@ -1,4 +1,4 @@
-import { RouteConfig } from "./routes";
+import { RouteConfig } from "src/lib";
 import { authRouteConfig } from "./routes.config.auth";
 
 export const PROJECT_SERVICE_HOST = 'http://project-service:3002';

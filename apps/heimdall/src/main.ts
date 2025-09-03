@@ -2,9 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import helmet from 'helmet';
-import { ResponseInterceptor } from './interceptors/response.interceptor';
-import { HttpExceptionFilter } from './filters/http-exceptions.filter';
-
+import { ResponseInterceptor, HttpExceptionFilter } from "src/lib";
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(helmet());

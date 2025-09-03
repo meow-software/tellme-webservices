@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { DynamicRateLimitGuard } from './dynamic-rate-limit.guard';
-import { RedisService } from '../redis/redis.service';
+import { RedisService } from '../lib';
 import { ExecutionContext, HttpException, HttpStatus } from '@nestjs/common';
 
 
