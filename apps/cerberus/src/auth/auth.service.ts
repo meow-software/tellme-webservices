@@ -1,17 +1,16 @@
 import { Inject, Injectable, BadRequestException, UnauthorizedException, ForbiddenException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { ClientProxy } from '@nestjs/microservices';
 import {
     RefreshPayload,
     UserPayload,
     getAccessTtl,
     getRefreshWindowSeconds
 } from 'src/lib';
-import { RedisService } from '../redis/redis.service';
+import { RedisService } from '../lib/redis/redis.service';
 import { AuthServiceAbstract } from './auth.service.abstract';
 import { redisCacheKeyPutUserSession } from 'src/lib';
 import * as eventBusInterface from 'src/lib';
-import { UserProxyService } from './proxy/user-proxy.service';
+import { UserProxyService } from './services/user-proxy.service';
 
 @Injectable()
 export class AuthService extends AuthServiceAbstract {
@@ -20,9 +19,9 @@ export class AuthService extends AuthServiceAbstract {
         protected readonly jwt: JwtService,
         protected readonly redis: RedisService,
         protected readonly userClient: UserProxyService,
-        @Inject("EVENT_BUS") protected readonly eventBus: eventBusInterface.IEventBus,
+        @Inject(eventBusInterface.EVENT_BUS) protected readonly eventBus: eventBusInterface.IEventBus,
     ) {
-        super(jwt, redis, userClient, eventBus);
+        super(jwt, redis, eventBus);
     }
 
     /**

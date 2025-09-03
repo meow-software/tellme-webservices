@@ -8,7 +8,7 @@ import { ClientCredentialsDto } from './dto/client-credentials.dto';
 import { ResendConfirmationDto } from './dto/resend-confirmation.dto';
 import { ResetPasswordDemandDto } from './dto/reset-password.dto';
 import { ResetPasswordConfirmationDto } from './dto/reset-password-confirmation.dto';
-import { JwtAuthGuard } from './jwt-auth-guard';
+import { JwtAuthGuard } from 'src/lib';
 
 @Controller('auth')
 export class AuthController {

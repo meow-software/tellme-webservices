@@ -11,14 +11,14 @@ import {
   IEventBus,
   Snowflake,
 } from 'src/lib';
-import { RedisService } from '../redis/redis.service';
+import { RedisService } from '../lib/redis/redis.service';
 import {
   UnauthorizedException,
   InternalServerErrorException,
   BadRequestException,
 } from '@nestjs/common';
 import * as speakeasy from "speakeasy";
-import { UserProxyService } from './proxy/user-proxy.service';
+import { UserProxyService } from './services/user-proxy.service';
 
 /**
  * Abstract AuthService containing core JWT/Redis logic.
@@ -32,7 +32,6 @@ export abstract class AuthServiceAbstract {
   constructor(
     protected readonly jwt: JwtService,
     protected readonly redis: RedisService,
-    protected readonly userClient: UserProxyService,
     protected readonly eventBus: IEventBus
   ) { }
 
