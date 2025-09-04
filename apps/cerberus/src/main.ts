@@ -14,7 +14,7 @@ async function bootstrap() {
       },
     }),
   );
-  const port = process.env.ATLAS_PORT ?? 3001;
+  const port = process.env.CERBERUS_PORT ?? 3001;
   await app.listen(port);
   console.log(`Cerberus service listening on port ${port}.`);
 }

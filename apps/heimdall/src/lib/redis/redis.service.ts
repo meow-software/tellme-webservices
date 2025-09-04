@@ -9,7 +9,6 @@ export class RedisService extends AbstractRedis {
   }
   
   async onModuleInit() {
-    console.info('Redis connected depuis Heimdall');
+    // console.info('Redis connected depuis Heimdall');
   }
-
 }

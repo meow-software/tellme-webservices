@@ -70,7 +70,7 @@ export class ProxyController {
     ) {
         const incomingPath = req.path.replace(/^\/api/, '') || '/';
         const incomingMethod = req.method.toUpperCase();
-        console.log(this.compiled)
+        // console.log(this.compiled)
 
         // Find a matching route (by method + path)
         const found = this.compiled.find(

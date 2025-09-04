@@ -19,6 +19,8 @@ async function bootstrap() {
   );
   app.useGlobalInterceptors(new ResponseInterceptor());
   app.useGlobalFilters(new HttpExceptionFilter());
-  await app.listen(process.env.HEIMDALL_PORT ?? 3000);
+  const port = process.env.HEIMDALL_PORT ?? 3002;
+  await app.listen(port);
+  console.log(`Heimdall service listening on port ${port}.`);
 }
 bootstrap();
