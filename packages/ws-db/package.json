@@ -1,8 +1,9 @@
 {
   "name": "@tellme/ws-db",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "The DB package provides a centralized and consistent way to interact with databases across all TellMe backend services.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "dev": "npm run build --workspace=@tellme/ws-db", 
     "devw": "powershell -Command \"Remove-Item -Recurse -Force ./dist\" && npm run build --workspace=@tellme/ws-db",
