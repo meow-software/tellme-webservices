@@ -1,14 +1,7 @@
 import { BadRequestException, Body, Controller, Get, Headers, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { RegisterDto } from './dto/register.dto';
-import { LoginDto } from './dto/login.dto';
-import { RefreshDto } from './dto/refresh.dto';
 import Request from 'express';
-import { ClientCredentialsDto } from './dto/client-credentials.dto';
-import { ResendConfirmationDto } from './dto/resend-confirmation.dto';
-import { ResetPasswordDemandDto } from './dto/reset-password.dto';
-import { ResetPasswordConfirmationDto } from './dto/reset-password-confirmation.dto';
-import { JwtAuthGuard } from 'src/lib';
+import { ClientCredentialsDto, JwtAuthGuard, LoginDto, RefreshDto, RegisterDto, ResendConfirmationDto, ResetPasswordConfirmationDto, ResetPasswordDemandDto } from 'src/lib';
 
 @Controller('auth')
 export class AuthController {

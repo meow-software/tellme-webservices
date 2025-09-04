@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "dev": "npm run build --workspace=@tellme/ws-common", 
+    "dev": "npm run build --workspace=@tellme/ws-common",
     "devw": "powershell -Command \"Remove-Item -Recurse -Force ./dist\" && npm run build --workspace=@tellme/ws-common",
     "devl": "rm -r ./dist/ && npm run build --workspace=@tellme/ws-common",
     "build": "tsc",
@@ -15,5 +15,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs"
+  "type": "commonjs",
+  "dependencies": {
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2"
+  }
 }

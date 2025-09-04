@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsString, Length, MinLength } from 'class-validator';
-import { SnowflakeDto } from './abstract/snowflake-abstract.dto';
+import { SnowflakeDto } from '../index';
 
 export class ResetPasswordConfirmationDto extends SnowflakeDto {
     @IsString()

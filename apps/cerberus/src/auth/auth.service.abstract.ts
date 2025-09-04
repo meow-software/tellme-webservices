@@ -18,7 +18,6 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import * as speakeasy from "speakeasy";
-import { UserProxyService } from './services/user-proxy.service';
 
 /**
  * Abstract AuthService containing core JWT/Redis logic.

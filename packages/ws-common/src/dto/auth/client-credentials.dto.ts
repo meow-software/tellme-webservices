@@ -1,5 +1,5 @@
 import { IsString, Length } from 'class-validator';
-import { SnowflakeDto } from './abstract/snowflake-abstract.dto';
+import { SnowflakeDto } from '../index';
 
 export class ClientCredentialsDto extends SnowflakeDto{
   @IsString() 

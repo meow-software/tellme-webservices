@@ -2,18 +2,12 @@ import { Controller, Get, Param, UseGuards, Patch, Body, Delete, Req, Query, Pos
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GetUserQuery } from './cqrs/queries/get-user.query';
 import { UpdateUserCommand } from './cqrs/commands/update-user.command';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { SearchUsersQuery } from './cqrs/queries/search-users.query';
 import { DeleteUserCommand } from './cqrs/commands/delete-user.command';
-import { CreateUserDto } from './dto/create-user.dto';
 import { CreateUserCommand } from './cqrs/commands/create-user.command';
-import { SearchUsersDto } from './dto/search-users.dto';
-import { CheckLoginDto } from './dto/check-login.dto';
-import { CheckLoginBotDto } from './dto/check-login-bot.dto';
 import { CheckLoginBotQuery } from './cqrs/queries/check-login-bot.query';
 import { CheckLoginQuery } from './cqrs/queries/check-login.query';
-import { GetUserDto } from './dto/get-user.dto';
-import { JwtAuthGuard } from 'src/lib';
+import { CheckLoginBotDto, CheckLoginDto, CreateUserDto, GetUserDto, JwtAuthGuard, SearchUsersDto, UpdateUserDto } from 'src/lib';
 
 @Controller('users')
 export class UsersController {

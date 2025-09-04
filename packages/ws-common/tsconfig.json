@@ -13,8 +13,8 @@
     "resolveJsonModule": true,  // Allows importing JSON files as modules.
     "experimentalDecorators": true,  // Enables support for experimental decorators in TypeScript.
     "emitDecoratorMetadata": true,  // Enables the generation of metadata for decorators, necessary for NestJS.
-    "moduleResolution": "node"  // Specifies how modules get resolved. "node" is for Node.js module resolution.
- 
+    "moduleResolution": "node",  // Specifies how modules get resolved. "node" is for Node.js module resolution.
+    "strictPropertyInitialization": false
   },
-  "include": ["index.ts"]  // Specifies the files or directories to be included in the compilation process.
+  "include": ["index.ts", "src/**/*"], // Specifies the files or directories to be included in the compilation process.
 }
