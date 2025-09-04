@@ -59,6 +59,9 @@ export function newJti(): string {
     return randomUUID();
 }
 
+export type UserClientType = 'user' | 'bot';
+
+
 /**
  * Base user payload structure for JWT tokens.
  * Contains essential user identification information.
@@ -70,7 +73,7 @@ export type UserPayload = {
     email?: string;
     /** User roles - can be array of strings or space-separated string (optional) */
     roles?: string[] | string;
-    client: 'user' | 'bot'
+    client: UserClientType
 };
 
 export type BaseUserPayload = {

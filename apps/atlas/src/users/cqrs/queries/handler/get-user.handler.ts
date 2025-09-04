@@ -1,20 +1,19 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { GetUserQuery } from '../get-user.query';
-import {SnowflakeService, DatabaseService} from 'src/lib';
+import {SnowflakeService, DatabaseService, redisCacheKeyUser, REDIS_CACHE_USER_TTL} from 'src/lib';
 import { AtlasRedisService } from 'src/services/redis.service';
 
 @QueryHandler(GetUserQuery)
 export class GetUserHandler implements IQueryHandler<GetUserQuery> {
-    private CACHE_TTL = 300;
+    private CACHE_TTL = REDIS_CACHE_USER_TTL;
     constructor(private db: DatabaseService, private snowflake: SnowflakeService, private redis: AtlasRedisService) { }
 
     async execute(query: GetUserQuery) {
         let { id, full } = query;
-        const key = `user:${id}`; // Todo mettre la bonne cle et le bon ttl
+        const key = redisCacheKeyUser(id);
         let user, cached;
 
         if (!full) cached = await this.redis.getJSON(key);
-
         if (cached) user = cached;
         else {
             let _id = this.snowflake.toBigInt(id);
