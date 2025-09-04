@@ -19,9 +19,8 @@ import { AtlasRedisService } from 'src/services/redis.service';
   controllers: [UsersController],
   providers: [
     DatabaseService,
-    // AtlasRedisService,
-    // SnowflakeService,
-    // ResponseFormatterService,
+    AtlasRedisService,
+    SnowflakeService,
     // CQRS
     // Commands
     CreateUserHandler,

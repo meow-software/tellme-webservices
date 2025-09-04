@@ -1,5 +1,4 @@
-import { Snowflake } from "src/lib";
-import { UpdateUserDto } from "src/users/dto/update-user.dto";
+import { Snowflake, UpdateUserDto } from "src/lib";
 
 export class UpdateUserCommand {
   constructor(public readonly userId: Snowflake, public readonly dto: UpdateUserDto) {}
