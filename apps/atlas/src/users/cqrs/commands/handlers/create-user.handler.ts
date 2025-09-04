@@ -4,12 +4,12 @@ import { CreateUserCommand } from '../create-user.command';
 import { ConflictException, Inject } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import type { IEventBus } from 'src/lib';
-import {SnowflakeService, PrismaService, EVENT_BUS} from 'src/lib';
+import {SnowflakeService, DatabaseService, EVENT_BUS} from 'src/lib';
 
 @CommandHandler(CreateUserCommand)
 export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
   constructor(
-    private prisma: PrismaService,
+    private db: DatabaseService,
     private snowflake: SnowflakeService,
     @Inject(EVENT_BUS) private eventBus: IEventBus
   ) { }
@@ -20,7 +20,7 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
     // can be create
     let user;
     try {
-      user = await this.prisma.user.create({
+      user = await this.db.user.create({
         data: {
           id: this.snowflake.generate(),
           username: command.username,

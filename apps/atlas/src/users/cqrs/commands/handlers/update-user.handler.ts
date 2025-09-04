@@ -2,14 +2,14 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { UpdateUserCommand } from '../update-user.command';
 import { Inject } from '@nestjs/common';
 import type { IEventBus } from 'src/lib';
-import {SnowflakeService, PrismaService, EVENT_BUS} from 'src/lib';
+import {SnowflakeService, DatabaseService, EVENT_BUS} from 'src/lib';
 import { AtlasRedisService } from 'src/services/redis.service';
 
 @CommandHandler(UpdateUserCommand)
 export class UpdateUserHandler implements ICommandHandler<UpdateUserCommand> {
   private CACHE_TTL = 300;
   constructor(
-    private prisma: PrismaService,
+    private db: DatabaseService,
     private snowflake: SnowflakeService,
     private redis: AtlasRedisService,
     @Inject(EVENT_BUS) private eventBus: IEventBus,
@@ -17,7 +17,7 @@ export class UpdateUserHandler implements ICommandHandler<UpdateUserCommand> {
 
   async execute(command: UpdateUserCommand) {
     const { userId, dto } = command;
-    const user = await this.prisma.user.update({ where: { id: this.snowflake.toBigInt(userId) }, data: dto });
+    const user = await this.db.user.update({ where: { id: this.snowflake.toBigInt(userId) }, data: dto });
     // invalidate cache
     await this.redis.del(`user:${userId}`);
     // publish event

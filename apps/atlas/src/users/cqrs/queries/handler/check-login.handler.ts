@@ -2,11 +2,11 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import * as bcrypt from 'bcrypt';
 import { CheckLoginQuery } from '../check-login.query';
 import { UnauthorizedException } from '@nestjs/common';
-import { PrismaService } from 'src/lib';
+import { DatabaseService } from 'src/lib';
 
 @QueryHandler(CheckLoginQuery)
 export class CheckLoginHandler implements IQueryHandler<CheckLoginQuery> {
-    constructor(private usersRepo: PrismaService) { }
+    constructor(private usersRepo: DatabaseService) { }
 
     async execute(query: CheckLoginQuery) {
         const { usernameOrEmail, password } = query;

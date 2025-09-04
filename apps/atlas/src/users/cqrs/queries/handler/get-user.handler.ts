@@ -1,12 +1,12 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { GetUserQuery } from '../get-user.query';
-import {SnowflakeService, PrismaService} from 'src/lib';
+import {SnowflakeService, DatabaseService} from 'src/lib';
 import { AtlasRedisService } from 'src/services/redis.service';
 
 @QueryHandler(GetUserQuery)
 export class GetUserHandler implements IQueryHandler<GetUserQuery> {
     private CACHE_TTL = 300;
-    constructor(private prisma: PrismaService, private snowflake: SnowflakeService, private redis: AtlasRedisService) { }
+    constructor(private db: DatabaseService, private snowflake: SnowflakeService, private redis: AtlasRedisService) { }
 
     async execute(query: GetUserQuery) {
         let { id, full } = query;
@@ -22,7 +22,7 @@ export class GetUserHandler implements IQueryHandler<GetUserQuery> {
                 ? { id: true, username: true, email: true, isBot: true }
                 : { id: true, username: true };
                 
-            user = await this.prisma.user.findUnique({ where: { id: _id }, select });
+            user = await this.db.user.findUnique({ where: { id: _id }, select });
             if (!full && user) {
                 cached = { ...user, id: this.snowflake.toString(user.id) };
             } // cached is already null

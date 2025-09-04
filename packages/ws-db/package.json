@@ -5,13 +5,27 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "dev": "npm run build --workspace=@tellme/ws-db", 
+    "dev": "npm run build --workspace=@tellme/ws-db",
     "devw": "powershell -Command \"Remove-Item -Recurse -Force ./dist\" && npm run build --workspace=@tellme/ws-db",
     "devl": "rm -r ./dist/ && npm run build --workspace=@tellme/ws-db",
     "build": "tsc",
     "watch": "tsc --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./client": {
+      "types": "./src/generated/prisma/index.d.ts",
+      "default": "./src/generated/prisma/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src/generated/prisma"
+  ],
   "keywords": [],
   "author": "",
   "license": "ISC",

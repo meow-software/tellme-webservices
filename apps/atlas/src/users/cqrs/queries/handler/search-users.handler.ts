@@ -1,14 +1,14 @@
 
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { SearchUsersQuery } from '../search-users.query';
-import { PrismaService } from 'src/lib';
+import { DatabaseService } from 'src/lib';
 
 @QueryHandler(SearchUsersQuery)
 export class SearchUsersHandler implements IQueryHandler<SearchUsersQuery> {
-  constructor(private prisma: PrismaService) {}
+  constructor(private db: DatabaseService) {}
 
   async execute(query: SearchUsersQuery) {
-    return this.prisma.user.findMany({
+    return this.db.user.findMany({
       where: {
         OR: [
           { username: { contains: query.term, mode: 'insensitive' } },

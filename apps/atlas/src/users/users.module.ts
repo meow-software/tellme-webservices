@@ -8,7 +8,7 @@ import { DeleteUserHandler } from './cqrs/commands/handlers/delete-user.handler'
 import { CheckLoginBotHandler } from './cqrs/queries/handler/check-login-bot.handler';
 import { CheckLoginHandler } from './cqrs/queries/handler/check-login.handler';
 import { SearchUsersHandler } from './cqrs/queries/handler/search-users.handler';
-import { EventBusModule, PrismaService, ResponseFormatterService, SnowflakeService } from 'src/lib';
+import { EventBusModule, DatabaseService, ResponseFormatterService, SnowflakeService } from 'src/lib';
 import { AtlasRedisService } from 'src/services/redis.service';
 
 @Module({
@@ -18,7 +18,7 @@ import { AtlasRedisService } from 'src/services/redis.service';
   ],
   controllers: [UsersController],
   providers: [
-    PrismaService,
+    DatabaseService,
     // AtlasRedisService,
     // SnowflakeService,
     // ResponseFormatterService,

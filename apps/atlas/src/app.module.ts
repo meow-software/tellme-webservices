@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import * as path from 'path'; 
 import { UsersModule } from './users/users.module';
-import { AuthModule, PrismaService, ResponseFormatterInterceptor, ResponseFormatterService, SnowflakeService } from './lib';
+import { AuthModule, DatabaseService, ResponseFormatterInterceptor, ResponseFormatterService, SnowflakeService } from './lib';
 import { AtlasRedisService } from './services/redis.service';
 
 @Module({
@@ -22,14 +22,14 @@ import { AtlasRedisService } from './services/redis.service';
   controllers: [AppController],
   providers: [
     AppService,
-    PrismaService,
+    DatabaseService,
     AtlasRedisService,
     SnowflakeService,
     ResponseFormatterService,
     ResponseFormatterInterceptor
   ],
   exports: [
-    PrismaService,
+    DatabaseService,
     AtlasRedisService,
     SnowflakeService,
     ResponseFormatterService
