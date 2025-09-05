@@ -46,9 +46,12 @@ export class ResponseInterceptor implements NestInterceptor {
         ResponseUtil.catch<any>(
           {
             data: data?.payload ?? data ?? {},
-            message: data?.message || 'OK',
+            message:
+              // data?.message ||
+              'OK',
           },
           req.originalUrl,
+          res.statusCode,
         ),
       ),
     );

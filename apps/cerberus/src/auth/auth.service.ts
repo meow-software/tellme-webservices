@@ -8,7 +8,7 @@ import {
 } from 'src/lib';
 import { RedisService } from '../lib/redis/redis.service';
 import { AuthServiceAbstract } from './auth.service.abstract';
-import { redisCacheKeyPutUserSession, RegisterDto } from 'src/lib';
+import { redisCacheKeyPutUserSession, RegisterDto, LoginDto } from 'src/lib';
 import * as eventBusInterface from 'src/lib';
 import { UserProxyService } from './services/user-proxy.service';
 
@@ -29,20 +29,13 @@ export class AuthService extends AuthServiceAbstract {
      * then issues an access/refresh token pair.
      */
     async register(dto: RegisterDto) {
-        console.log("--dt", dto, "--", { ...dto }) 
         let user;
-        // try {
             user = await this.userClient
                 .post(`${this.userServiceTarget}/`, { ...dto }) as any;
-
-        // } catch (e) {
-        //     console.log("--li", e.code);
-        //     throw e;
-        // }
-        // this.sendEmailConfirmation(user.id, user.email);
+        this.sendEmailConfirmation(user.id, user.email);
         const payload: UserPayload = { sub: String(user.id), email: user.email, roles: user.roles, client: 'user' };
-        // return { ...this.issuePair(payload), message: "Check your email to confirm your account." };
-        return { ...user, message: "Check your email to confirm your account." };
+        return { ...this.issuePair(payload), message: "Check your email to confirm your account." };
+        // return { ...user, message: "Check your email to confirm your account." };
     }
 
     async confirmRegister(token: string) {
@@ -68,15 +61,9 @@ export class AuthService extends AuthServiceAbstract {
      * Login: delegates validation to the USER_SERVICE (check password),
      * then issues an access/refresh token pair.
      */
-    async login(email: string, password: string) {
+    async login(dto: LoginDto) {
         const user = await this.userClient
-            .post(`${this.userServiceTarget}/checkLogin`, { email, password }) as any;
-
-        // const user = {
-        //     id: "485124851845",
-        //     email,
-        //     roles: ["user", "admin"],
-        // }
+            .post(`${this.userServiceTarget}/check/login`, {...dto }) as any;
 
         if (!user) {
             throw new UnauthorizedException('Invalid credentials.');
@@ -221,7 +208,7 @@ export class AuthService extends AuthServiceAbstract {
      * @throws UnauthorizedException if bot credentials are invalid
      */
     async getBotToken(id: string, token: string) {
-        const bot = await this.userClient.post('users/bot/checkLogin', { id, token: token }) as any; // TODO: replace with a User interface
+        const bot = await this.userClient.post('users/check/login/bot', { id, token: token }) as any;
 
         // const bot = {
         //     id: clientId,

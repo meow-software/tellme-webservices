@@ -8,7 +8,7 @@ import {
     CanActivate,
     Param,
     HttpStatus,
-    HttpException,
+    HttpException, 
 } from '@nestjs/common';
 import type { Request, Response, NextFunction } from 'express';
 import { routes } from '../lib/routes/routes.config';

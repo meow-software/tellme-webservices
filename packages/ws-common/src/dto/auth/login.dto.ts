@@ -1,8 +1,4 @@
-import { IsEmail, IsStrongPassword } from 'class-validator';
+import { CheckLoginDto } from '../users';
 
-export class LoginDto {
-  @IsEmail() email: string;
-
-  @IsStrongPassword()
-  password: string;
+export class LoginDto extends CheckLoginDto{
 }

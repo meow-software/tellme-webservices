@@ -21,18 +21,23 @@ export class HttpExceptionFilter implements ExceptionFilter {
       : HttpStatus.INTERNAL_SERVER_ERROR;
 
     // Nest exceptions often contain a structured response
-    const errorResponse = exception.getResponse();
+    let errorResponse = exception.getResponse();
+    if (typeof errorResponse === 'string') {
+      errorResponse = {error: errorResponse}
+    }
+
 
     // Build standardized error response
     const apiResponse: ApiResponse<null> = ResponseUtil.catch(
       {
-        errors: errorResponse,
+        errors: {...errorResponse, statusCode: status},
         message:
-          (errorResponse as any)?.message ||
-          exception.message ||
+          // (errorResponse as any)?.message ||
+          // exception.message ||
           'KO',
       },
       request.url,
+      status,
     );
 
     response.status(status).json(apiResponse);
