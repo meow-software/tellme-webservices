@@ -79,7 +79,7 @@ export class AuthService extends AuthServiceAbstract {
         const pair = issuePair.pair;
 
         // Store refresh in Redis (key = session, value = userId), TTL = refresh duration
-        await this.redis.setJSON(redisCacheKeyPutUserSession(rp.sub, rp.client, rp.jti), { uid: rp.sub }, pair.expiresIn);
+        await this.redis.setJSON(redisCacheKeyPutUserSession(rp.sub, rp.client, rp.jti), { uid: rp.sub }, pair.RTExpiresIn);
         return pair;
     }
 
@@ -134,7 +134,7 @@ export class AuthService extends AuthServiceAbstract {
             const pair = issuePair.pair;
 
             // Store refresh in Redis (key = session, value = userId), TTL = refresh duration
-            await this.redis.setJSON(redisCacheKeyPutUserSession(rp.sub, rp.client, rp.jti), { uid: rp.sub }, pair.expiresIn);
+            await this.redis.setJSON(redisCacheKeyPutUserSession(rp.sub, rp.client, rp.jti), { uid: rp.sub }, pair.RTExpiresIn);
             return pair;
         }
 
@@ -146,7 +146,7 @@ export class AuthService extends AuthServiceAbstract {
             const pair = issuePair.pair;
 
             // Store refresh in Redis (key = session, value = userId), TTL = refresh duration
-            await this.redis.setJSON(redisCacheKeyPutUserSession(rp.sub, rp.client, rp.jti), { uid: rp.sub }, pair.expiresIn);
+            await this.redis.setJSON(redisCacheKeyPutUserSession(rp.sub, rp.client, rp.jti), { uid: rp.sub }, pair.RTExpiresIn);
             return pair;
         }
 

@@ -101,7 +101,8 @@ export abstract class AuthServiceAbstract {
         accessToken,
         refreshToken,
         tokenType: 'Bearer',
-        expiresIn: expiresIn,
+        ATExpiresIn: expiresIn,
+        RTExpiresIn: getRefreshTtl(),
       }
     };
   }
