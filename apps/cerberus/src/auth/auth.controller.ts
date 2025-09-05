@@ -38,7 +38,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Post('refresh')
   async refresh(
-    @Body('refreshToken') dto: RefreshDto,
+    @Body() dto: RefreshDto,
     @Headers('authorization') authorization?: string) {
     const accessToken = authorization?.replace('Bearer ', '');
     return this.auth.refresh(dto.refreshToken, accessToken);

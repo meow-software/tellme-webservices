@@ -49,7 +49,7 @@ export const authRouteConfig: RouteConfig[] = [
     rateLimit: { limit: 5, ttl: 60 } 
   },
   { 
-    method: 'GET', 
+    method: 'POST', 
     path: '/auth/refresh', 
     target: {
       host: AUTH_SERVICE_HOST,

@@ -11,8 +11,4 @@ export class CreateUserDto extends RegisterDto {
 
   // @IsStrongPassword()
   // password: string;
-
-  @IsOptional()
-  @IsBoolean()
-  isBot?: boolean;
 }

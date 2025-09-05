@@ -18,7 +18,7 @@ export class GetUserHandler implements IQueryHandler<GetUserQuery> {
         else {
             let _id = this.snowflake.toBigInt(id);
             const select = full
-                ? { id: true, username: true, email: true, isBot: true }
+                ? { id: true, username: true, email: true }
                 : { id: true, username: true };
                 
             user = await this.db.user.findUnique({ where: { id: _id }, select });
