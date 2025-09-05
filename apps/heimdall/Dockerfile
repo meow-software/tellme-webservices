@@ -7,10 +7,10 @@ WORKDIR /app
 COPY package.json package-lock.json turbo.json ./
 
 # Copier le code source
-COPY apps/heimdall ./apps/heimdall
-COPY packages ./packages
+COPY prune/heimdall/full/apps/heimdall ./apps/heimdall
+COPY prune/heimdall/full/packages ./packages
 
-RUN npm ci --omit=dev
+RUN npm ci
 
 # Build uniquement le service voulu
 RUN npx turbo run build --filter=heimdall...
