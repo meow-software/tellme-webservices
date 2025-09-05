@@ -7,7 +7,6 @@ import { DatabaseService } from 'src/lib';
 @QueryHandler(CheckLoginQuery)
 export class CheckLoginHandler implements IQueryHandler<CheckLoginQuery> {
     constructor(private usersRepo: DatabaseService) { }
-
     async execute(query: CheckLoginQuery) {
         const { usernameOrEmail, password } = query;
         const repository = await this.usersRepo.user
@@ -21,7 +20,7 @@ export class CheckLoginHandler implements IQueryHandler<CheckLoginQuery> {
             },
         });
 
-        if (!user || !(bcrypt.compare(password, user.password))) throw new UnauthorizedException('Invalid user credentials.');
+        if (!user || !(await bcrypt.compare(password, user.password))) throw new UnauthorizedException('Invalid user credentials.');
         return user;
     }
 }

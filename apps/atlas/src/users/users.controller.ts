@@ -1,4 +1,4 @@
-import { Controller, Get, Param, UseGuards, Patch, Body, Delete, Req, Query, Post } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards, Patch, Body, Delete, Req, Query, Post, HttpCode, HttpStatus } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GetUserQuery } from './cqrs/queries/get-user.query';
 import { UpdateUserCommand } from './cqrs/commands/update-user.command';
@@ -22,12 +22,14 @@ export class UsersController {
         );
     }
     @Post("check/login")
+    @HttpCode(HttpStatus.OK)
     async checkLogin(@Body() dto: CheckLoginDto) {
         return this.queryBus.execute(
             new CheckLoginQuery(dto.usernameOrEmail, dto.password),
         );
     }
     @Post("check/login/bot")
+    @HttpCode(HttpStatus.OK)
     async checkLoginBot(@Body() dto: CheckLoginBotDto) {
         return this.queryBus.execute(
             new CheckLoginBotQuery(dto.id, dto.token),

@@ -68,7 +68,7 @@ export class AuthService extends AuthServiceAbstract {
         if (!user) {
             throw new UnauthorizedException('Invalid credentials.');
         }
-        if (!user.isConfirmed) {
+        if (!user.isConfirmed) { 
             this.sendEmailConfirmation(user.id, user.email);
             throw new UnauthorizedException('Account not confirmed, confirmation email resent.');
         }
