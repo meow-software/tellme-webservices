@@ -972,7 +972,7 @@ export namespace Prisma {
     username: string | null
     password: string | null
     email: string | null
-    isBot: boolean | null
+    isConfirmed: boolean | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -980,7 +980,7 @@ export namespace Prisma {
     username: string | null
     password: string | null
     email: string | null
-    isBot: boolean | null
+    isConfirmed: boolean | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -988,7 +988,7 @@ export namespace Prisma {
     username: number
     password: number
     email: number
-    isBot: number
+    isConfirmed: number
     _all: number
   }
 
@@ -1006,7 +1006,7 @@ export namespace Prisma {
     username?: true
     password?: true
     email?: true
-    isBot?: true
+    isConfirmed?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -1014,7 +1014,7 @@ export namespace Prisma {
     username?: true
     password?: true
     email?: true
-    isBot?: true
+    isConfirmed?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -1022,7 +1022,7 @@ export namespace Prisma {
     username?: true
     password?: true
     email?: true
-    isBot?: true
+    isConfirmed?: true
     _all?: true
   }
 
@@ -1116,8 +1116,8 @@ export namespace Prisma {
     id: bigint
     username: string
     password: string
-    email: string
-    isBot: boolean
+    email: string | null
+    isConfirmed: boolean
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
     _sum: UserSumAggregateOutputType | null
@@ -1144,7 +1144,7 @@ export namespace Prisma {
     username?: boolean
     password?: boolean
     email?: boolean
-    isBot?: boolean
+    isConfirmed?: boolean
     bot?: boolean | User$botArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1153,7 +1153,7 @@ export namespace Prisma {
     username?: boolean
     password?: boolean
     email?: boolean
-    isBot?: boolean
+    isConfirmed?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1161,7 +1161,7 @@ export namespace Prisma {
     username?: boolean
     password?: boolean
     email?: boolean
-    isBot?: boolean
+    isConfirmed?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -1169,10 +1169,10 @@ export namespace Prisma {
     username?: boolean
     password?: boolean
     email?: boolean
-    isBot?: boolean
+    isConfirmed?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "password" | "email" | "isBot", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "password" | "email" | "isConfirmed", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     bot?: boolean | User$botArgs<ExtArgs>
   }
@@ -1188,8 +1188,8 @@ export namespace Prisma {
       id: bigint
       username: string
       password: string
-      email: string
-      isBot: boolean
+      email: string | null
+      isConfirmed: boolean
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -1618,7 +1618,7 @@ export namespace Prisma {
     readonly username: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
     readonly email: FieldRef<"User", 'String'>
-    readonly isBot: FieldRef<"User", 'Boolean'>
+    readonly isConfirmed: FieldRef<"User", 'Boolean'>
   }
     
 
@@ -3116,7 +3116,7 @@ export namespace Prisma {
     username: 'username',
     password: 'password',
     email: 'email',
-    isBot: 'isBot'
+    isConfirmed: 'isConfirmed'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -3144,6 +3144,14 @@ export namespace Prisma {
   };
 
   export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+  export const NullsOrder: {
+    first: 'first',
+    last: 'last'
+  };
+
+  export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
   /**
@@ -3224,8 +3232,8 @@ export namespace Prisma {
     id?: BigIntFilter<"User"> | bigint | number
     username?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
-    email?: StringFilter<"User"> | string
-    isBot?: BoolFilter<"User"> | boolean
+    email?: StringNullableFilter<"User"> | string | null
+    isConfirmed?: BoolFilter<"User"> | boolean
     bot?: XOR<BotNullableScalarRelationFilter, BotWhereInput> | null
   }
 
@@ -3233,29 +3241,29 @@ export namespace Prisma {
     id?: SortOrder
     username?: SortOrder
     password?: SortOrder
-    email?: SortOrder
-    isBot?: SortOrder
+    email?: SortOrderInput | SortOrder
+    isConfirmed?: SortOrder
     bot?: BotOrderByWithRelationInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: bigint | number
     username?: string
-    password?: string
     email?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
-    isBot?: BoolFilter<"User"> | boolean
+    password?: StringFilter<"User"> | string
+    isConfirmed?: BoolFilter<"User"> | boolean
     bot?: XOR<BotNullableScalarRelationFilter, BotWhereInput> | null
-  }, "id" | "username" | "password" | "email">
+  }, "id" | "username" | "email">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
     username?: SortOrder
     password?: SortOrder
-    email?: SortOrder
-    isBot?: SortOrder
+    email?: SortOrderInput | SortOrder
+    isConfirmed?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -3270,8 +3278,8 @@ export namespace Prisma {
     id?: BigIntWithAggregatesFilter<"User"> | bigint | number
     username?: StringWithAggregatesFilter<"User"> | string
     password?: StringWithAggregatesFilter<"User"> | string
-    email?: StringWithAggregatesFilter<"User"> | string
-    isBot?: BoolWithAggregatesFilter<"User"> | boolean
+    email?: StringNullableWithAggregatesFilter<"User"> | string | null
+    isConfirmed?: BoolWithAggregatesFilter<"User"> | boolean
   }
 
   export type BotWhereInput = {
@@ -3320,8 +3328,8 @@ export namespace Prisma {
     id: bigint | number
     username: string
     password: string
-    email: string
-    isBot?: boolean
+    email?: string | null
+    isConfirmed?: boolean
     bot?: BotCreateNestedOneWithoutUserInput
   }
 
@@ -3329,8 +3337,8 @@ export namespace Prisma {
     id: bigint | number
     username: string
     password: string
-    email: string
-    isBot?: boolean
+    email?: string | null
+    isConfirmed?: boolean
     bot?: BotUncheckedCreateNestedOneWithoutUserInput
   }
 
@@ -3338,8 +3346,8 @@ export namespace Prisma {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     username?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    isBot?: BoolFieldUpdateOperationsInput | boolean
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
     bot?: BotUpdateOneWithoutUserNestedInput
   }
 
@@ -3347,8 +3355,8 @@ export namespace Prisma {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     username?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    isBot?: BoolFieldUpdateOperationsInput | boolean
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
     bot?: BotUncheckedUpdateOneWithoutUserNestedInput
   }
 
@@ -3356,24 +3364,24 @@ export namespace Prisma {
     id: bigint | number
     username: string
     password: string
-    email: string
-    isBot?: boolean
+    email?: string | null
+    isConfirmed?: boolean
   }
 
   export type UserUpdateManyMutationInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     username?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    isBot?: BoolFieldUpdateOperationsInput | boolean
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type UserUncheckedUpdateManyInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     username?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    isBot?: BoolFieldUpdateOperationsInput | boolean
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type BotCreateInput = {
@@ -3436,6 +3444,21 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type BoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
@@ -3446,12 +3469,17 @@ export namespace Prisma {
     isNot?: BotWhereInput | null
   }
 
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
+  }
+
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     username?: SortOrder
     password?: SortOrder
     email?: SortOrder
-    isBot?: SortOrder
+    isConfirmed?: SortOrder
   }
 
   export type UserAvgOrderByAggregateInput = {
@@ -3463,7 +3491,7 @@ export namespace Prisma {
     username?: SortOrder
     password?: SortOrder
     email?: SortOrder
-    isBot?: SortOrder
+    isConfirmed?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -3471,7 +3499,7 @@ export namespace Prisma {
     username?: SortOrder
     password?: SortOrder
     email?: SortOrder
-    isBot?: SortOrder
+    isConfirmed?: SortOrder
   }
 
   export type UserSumOrderByAggregateInput = {
@@ -3510,6 +3538,24 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -3570,6 +3616,10 @@ export namespace Prisma {
 
   export type StringFieldUpdateOperationsInput = {
     set?: string
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
   }
 
   export type BoolFieldUpdateOperationsInput = {
@@ -3635,6 +3685,20 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type NestedBoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
@@ -3695,6 +3759,34 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
@@ -3739,16 +3831,16 @@ export namespace Prisma {
     id: bigint | number
     username: string
     password: string
-    email: string
-    isBot?: boolean
+    email?: string | null
+    isConfirmed?: boolean
   }
 
   export type UserUncheckedCreateWithoutBotInput = {
     id: bigint | number
     username: string
     password: string
-    email: string
-    isBot?: boolean
+    email?: string | null
+    isConfirmed?: boolean
   }
 
   export type UserCreateOrConnectWithoutBotInput = {
@@ -3771,16 +3863,16 @@ export namespace Prisma {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     username?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    isBot?: BoolFieldUpdateOperationsInput | boolean
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type UserUncheckedUpdateWithoutBotInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     username?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    isBot?: BoolFieldUpdateOperationsInput | boolean
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
   }
 
 

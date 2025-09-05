@@ -15,18 +15,16 @@ datasource db {
 }
 
 model User {
-  id       BigInt  @id
-  username String  @unique
-  password String  @unique
-  email    String  @unique
-  isBot    Boolean @default(false)
-
-  bot Bot?
+  id          BigInt  @id
+  username    String  @unique
+  password    String
+  email       String? @unique
+  isConfirmed Boolean @default(false)
+  bot         Bot?
 }
 
 model Bot {
   id    BigInt @id
   token String
-
-  user User @relation(fields: [id], references: [id])
+  user  User   @relation(fields: [id], references: [id])
 }
