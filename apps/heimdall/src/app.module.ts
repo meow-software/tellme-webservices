@@ -12,10 +12,10 @@ import * as path from 'path';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: [
-        path.resolve(__dirname, '../../../.env'), // turbo .env
-        path.resolve(__dirname, './.env'), // local .env
-      ]
+      // envFilePath: [
+      //   path.resolve(__dirname, '../../../.env'), // turbo .env
+      //   path.resolve(__dirname, './.env'), // local .env
+      // ]
     }),  
     AuthModule,
   ],

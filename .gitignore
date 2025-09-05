@@ -42,3 +42,4 @@ redis-acl.conf
 
 # Prisma
 src/generated/prisma
+Dockerfile

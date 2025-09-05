@@ -29,5 +29,19 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs"
+  "type": "commonjs",
+  "devDependencies": {
+    "@nestjs/schematics": "^11.0.7",
+    "@types/node": "^22.18.1",
+    "prisma": "^6.15.0",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "@nestjs/cli": "^11.0.10",
+    "@nestjs/common": "^11.1.6",
+    "@nestjs/config": "^4.0.2",
+    "@nestjs/core": "^11.1.6",
+    "@nestjs/platform-express": "^11.1.6",
+    "@prisma/client": "^6.15.0"
+  }
 }

@@ -10,6 +10,7 @@ import {
   getBotAccessTtl,
   IEventBus,
   Snowflake,
+  requireEnv
 } from 'src/lib';
 import { RedisService } from '../lib/redis/redis.service';
 import {
@@ -217,9 +218,9 @@ export abstract class AuthServiceAbstract {
     const TTL = 60 * 15; // 15 min
     // Generate code
     const code = speakeasy.totp({
-      secret: process.env.OTP_SECRET_CODE,
+      secret: requireEnv("OTP_SECRET_CODE"),
       digits: 6,
-      step: process.env.OTP_STEP_TIME ?? 1800,
+      step: Number(process.env.OTP_STEP_TIME) ?? 1800,
       encoding: "base32",
     });
 
@@ -232,10 +233,10 @@ export abstract class AuthServiceAbstract {
   }
   protected async checkOTP(code: string) {
     return speakeasy.totp.verify({
-      secret: process.env.OTP_SECRET_CODE,
+      secret: requireEnv("OTP_SECRET_CODE"),
       token: code,
       digits: 6,
-      step: process.env.OTP_STEP_TIME ?? 1800, 
+      step: Number(process.env.OTP_STEP_TIME) ?? 1800,
       encoding: "base32",
     });
   }

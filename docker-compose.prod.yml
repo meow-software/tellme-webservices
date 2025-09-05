@@ -1,0 +1,70 @@
+version: '3.9'
+services:
+  # atlas:
+  #   build:
+  #     context: .
+  #     dockerfile: ./apps/atlas/Dockerfile
+  #   restart: always
+  #   env_file:
+  #     - .env
+  #   # ports:
+  #   #   - "3002:3000"
+  #   networks:
+  #     - backend
+
+  # cerberus:
+  #   build: 
+  #     context: .
+  #     dockerfile: ./apps/cerberus/Dockerfile
+  #   restart: always
+  #   env_file:
+  #     - .env
+  #   # ports:
+  #   #   - "3001:3000"
+  #   networks:
+  #     - backend
+
+  heimdall:
+    build:
+      context: .
+      dockerfile: ./apps/heimdall/Dockerfile
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+    # depends_on:
+    #   - cerberus
+    #   - atlas
+    networks:
+      - backend
+
+  redis:
+    image: redis:latest
+    restart: always
+    volumes:
+      - redis-data:/data_redis
+    networks:
+      - backend
+
+  postgres:
+    image: postgres:latest
+    restart: always
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: tellme_db
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  redis-data:
+    driver: local
+  db-data:
+    driver: local
