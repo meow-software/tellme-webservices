@@ -1,30 +1,33 @@
 version: '3.9'
 services:
-  # atlas:
-  #   build:
-  #     context: .
-  #     dockerfile: ./apps/atlas/Dockerfile
-  #   restart: always
-  #   env_file:
-  #     - .env
-  #   # ports:
-  #   #   - "3002:3000"
-  #   networks:
-  #     - backend
+  atlas:
+    container_name: atlas
+    build:
+      context: .
+      dockerfile: ./apps/atlas/Dockerfile
+    restart: always
+    env_file:
+      - .env
+    # ports:
+    #   - "3002:3000"
+    networks:
+      - backend
 
-  # cerberus:
-  #   build: 
-  #     context: .
-  #     dockerfile: ./apps/cerberus/Dockerfile
-  #   restart: always
-  #   env_file:
-  #     - .env
-  #   # ports:
-  #   #   - "3001:3000"
-  #   networks:
-  #     - backend
+  cerberus:
+    container_name: cerberus
+    build: 
+      context: .
+      dockerfile: ./apps/cerberus/Dockerfile
+    restart: always
+    env_file:
+      - .env
+    # ports:
+    #   - "3001:3000"
+    networks:
+      - backend
 
   heimdall:
+    container_name: heimdall
     build:
       context: .
       dockerfile: ./apps/heimdall/Dockerfile
@@ -40,14 +43,24 @@ services:
       - backend
 
   redis:
+    container_name: redis
     image: redis:latest
     restart: always
+    command: > 
+      redis-server 
+      --aclfile /usr/local/etc/redis/users.acl 
+    env_file:
+      - .env
     volumes:
-      - redis-data:/data_redis
+      - 'redis-data:/data_redis'
+      - './redis/redis-acl.conf:/usr/local/etc/redis/users.acl' 
+    ports:
+      - "6379:6379"
     networks:
       - backend
 
   postgres:
+    container_name: postgres
     image: postgres:latest
     restart: always
     volumes:

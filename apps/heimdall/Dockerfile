@@ -1,34 +1,33 @@
-# Étape 1 : builder avec turborepo
+# Step 1: build with turborepo
 FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Copier les fichiers racine
+# Copy root files
 COPY package.json package-lock.json turbo.json ./
 
-# Copier le code source
+# Copy source code
 COPY prune/heimdall/full/apps/heimdall ./apps/heimdall
 COPY prune/heimdall/full/packages ./packages
 
 RUN npm ci
 
-# Build uniquement le service voulu
+# Build only the desired service
 RUN npx turbo run build --filter=heimdall...
 
-# Étape 2 : runner
-# Runner
+# Step 2: runner
 FROM node:20-slim AS runner
 
 WORKDIR /app
 
-# Copier node_modules du builder
+# Copy node_modules from builder
 COPY --from=builder /app/node_modules ./node_modules
 
-# Copier ton service
+# Copy your service
 COPY --from=builder /app/apps/heimdall/dist ./dist
 COPY --from=builder /app/apps/heimdall/package.json ./
 
-# Copier aussi les packages partagés buildés
+# Also copy built shared packages
 COPY --from=builder /app/packages ./packages
 
 CMD ["node", "dist/main.js"]
