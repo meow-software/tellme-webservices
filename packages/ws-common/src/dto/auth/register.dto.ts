@@ -1,7 +1,13 @@
-import { IsEmail, IsOptional, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsStrongPassword } from 'class-validator';
+import { IsValidUsername } from '../validators';
 
-export class RegisterDto {
-  @IsEmail() email: string;
-  @MinLength(6) password: string;
-  @IsOptional() @IsString() role?: string; // ex: 'user' par défaut, ou fourni
+export class RegisterDto{
+  @IsValidUsername()
+  username: string;
+
+  @IsEmail() 
+  email: string;
+
+  @IsStrongPassword()
+  password: string;
 }

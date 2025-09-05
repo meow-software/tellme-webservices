@@ -1,4 +1,3 @@
-
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { CreateUserCommand } from '../create-user.command';
 import { ConflictException, Inject } from '@nestjs/common';

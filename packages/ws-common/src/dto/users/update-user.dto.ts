@@ -1,9 +1,9 @@
 import { IsOptional, IsString, MaxLength, IsUrl } from 'class-validator';
+import { IsValidUsername } from '../validators';
 
 export class UpdateUserDto {
   @IsOptional()
-  @IsString()
-  @MaxLength(30)
+  @IsValidUsername()
   username?: string;
 
   @IsOptional()

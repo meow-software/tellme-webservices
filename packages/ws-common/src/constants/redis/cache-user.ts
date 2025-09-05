@@ -1,7 +1,5 @@
-import {UserClientType} from "@tellme/ws-core";
-
 export const REDIS_CACHE_USER = `USER:`;
-export const REDIS_CACHE_USER_TTL = 60*3;
+export const REDIS_CACHE_USER_TTL = 60*5;
 
 /**
  * Constructs the Redis cache key for a user.

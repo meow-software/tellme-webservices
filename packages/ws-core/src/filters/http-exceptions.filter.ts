@@ -30,7 +30,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
         message:
           (errorResponse as any)?.message ||
           exception.message ||
-          'Unexpected error',
+          'KO',
       },
       request.url,
     );

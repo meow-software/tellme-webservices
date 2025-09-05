@@ -1,4 +1,6 @@
-import { SnowflakeDto } from '../index';
+import { IsSnowflake } from '../index';
 
-export class ResetPasswordDemandDto extends SnowflakeDto {
+export class ResetPasswordDemandDto {
+    @IsSnowflake()
+    id: string;
 }

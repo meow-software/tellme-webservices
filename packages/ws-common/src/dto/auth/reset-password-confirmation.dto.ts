@@ -1,18 +1,17 @@
-import { IsNotEmpty, IsString, Length, MinLength } from 'class-validator';
-import { SnowflakeDto } from '../index';
+import { IsString, IsStrongPassword, Length } from 'class-validator';
+import { IsSnowflake } from '../validators';
 
-export class ResetPasswordConfirmationDto extends SnowflakeDto {
+export class ResetPasswordConfirmationDto {
+    @IsSnowflake()
+    id: string;
+
     @IsString()
     @Length(6)
     code: string
 
-    @IsString()
-    @IsNotEmpty()
-    @MinLength(8)
-    password : string
-    
-    @IsString()
-    @IsNotEmpty()
-    @MinLength(8)
-    oldPassword : string
+    @IsStrongPassword()
+    password: string;
+
+    @IsStrongPassword()
+    oldPassword: string;
 }

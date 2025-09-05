@@ -18,6 +18,8 @@ export class Proxy {
             // 2) Copy headers. Remove "host" to avoid mismatch with target service.
             const headers = { ...req.headers };
             delete headers['host'];
+            delete headers['content-length'];
+            delete headers['transfer-encoding'];
 
             // 3) Handle query string (already present in targetUrl if you built it)
             // -> Nothing special to do here
@@ -29,34 +31,40 @@ export class Proxy {
                 // For all non-GET requests, use the parsed body
                 data = req.body;
             }
-
             // 5) Forward the request using axios
             const response = await axios.request({
                 url: targetUrl,
                 method,
                 headers,
                 data,
-                timeout: 30000
+                // timeout: 10000
             });
             // 6) Return the response to the client
             return response.data
 
         } catch (err: any) {
-            console.error('Proxy forward error:', err.message);
-            const status =
-                err instanceof HttpException
-                    ? err.getStatus()
-                    : err.response?.status || HttpStatus.BAD_GATEWAY;
+            // console.error("Proxy forward error:", err.message);
 
-            const errorDetails =
-                err.response?.data || err.message || 'Unknown proxy error';
+            // 1. HttpException (Nest)
+            if (err instanceof HttpException) {
+                throw err; 
+            }
 
+            // 2. Axios error from webservice
+            if (axios.isAxiosError(err) && err.response) {
+                throw new HttpException(
+                    err.response.data ?? { error: "UNKNOWN_ERROR", message: "Unknown error from web-service." },
+                    err.response.status
+                );
+            }
+
+            // 3. Erreur Node, network, etc.
             throw new HttpException(
                 {
-                    error: errorDetails,
-                    details: err.message,
+                    error: "PROXY_ERROR",
+                    message: err.message || "Unknown proxy error",
                 },
-                status,
+                HttpStatus.BAD_GATEWAY
             );
         }
     }

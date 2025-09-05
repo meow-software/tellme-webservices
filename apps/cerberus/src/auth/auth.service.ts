@@ -8,7 +8,7 @@ import {
 } from 'src/lib';
 import { RedisService } from '../lib/redis/redis.service';
 import { AuthServiceAbstract } from './auth.service.abstract';
-import { redisCacheKeyPutUserSession } from 'src/lib';
+import { redisCacheKeyPutUserSession, RegisterDto } from 'src/lib';
 import * as eventBusInterface from 'src/lib';
 import { UserProxyService } from './services/user-proxy.service';
 
@@ -28,12 +28,18 @@ export class AuthService extends AuthServiceAbstract {
      * Register: delegates user creation to the USER_SERVICE,
      * then issues an access/refresh token pair.
      */
-    async register(email: string, password: string, role?: string) {
-        const user = await this.userClient
-            .post(`${this.userServiceTarget}/`, { email, password, role }) as any;
+    async register(dto: RegisterDto) {
+        console.log("--dt", dto, "--", { ...dto }) 
+        let user;
+        // try {
+            user = await this.userClient
+                .post(`${this.userServiceTarget}/`, { ...dto }) as any;
 
-        this.sendEmailConfirmation(user.id, user.email);
-
+        // } catch (e) {
+        //     console.log("--li", e.code);
+        //     throw e;
+        // }
+        // this.sendEmailConfirmation(user.id, user.email);
         const payload: UserPayload = { sub: String(user.id), email: user.email, roles: user.roles, client: 'user' };
         // return { ...this.issuePair(payload), message: "Check your email to confirm your account." };
         return { ...user, message: "Check your email to confirm your account." };

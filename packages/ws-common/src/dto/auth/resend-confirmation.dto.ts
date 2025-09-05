@@ -1,4 +1,6 @@
-import { SnowflakeDto } from '../index';
+import { IsSnowflake } from '../validators';
 
-export class ResendConfirmationDto extends SnowflakeDto{
+export class ResendConfirmationDto {
+    @IsSnowflake()
+    id: string;
 }

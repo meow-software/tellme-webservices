@@ -1,14 +1,16 @@
-import { IsBoolean, IsEmail, IsNotEmpty, IsOptional, MinLength } from 'class-validator';
+import { IsBoolean, IsEmail, IsOptional, IsStrongPassword, ValidateNested } from 'class-validator';
+import { IsValidUsername } from '../validators';
+import { RegisterDto } from '../auth';
 
-export class CreateUserDto {
-  @IsNotEmpty()
-  username: string;
+export class CreateUserDto extends RegisterDto {
+  // @IsValidUsername()
+  // username: string;
 
-  @IsEmail()
-  email: string;
+  // @IsEmail()
+  // email: string;
 
-  @MinLength(6)
-  password: string;
+  // @IsStrongPassword()
+  // password: string;
 
   @IsOptional()
   @IsBoolean()

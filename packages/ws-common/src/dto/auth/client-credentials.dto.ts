@@ -1,8 +1,11 @@
 import { IsString, Length } from 'class-validator';
-import { SnowflakeDto } from '../index';
+import { IsSnowflake } from '../validators';
 
-export class ClientCredentialsDto extends SnowflakeDto{
-  @IsString() 
-  @Length(70) 
+export class ClientCredentialsDto {
+  @IsSnowflake()
+  id: string;
+
+  @IsString()
+  @Length(70)
   clientSecret: string;
 }
