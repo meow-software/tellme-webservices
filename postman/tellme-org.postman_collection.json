@@ -1,0 +1,1171 @@
+{
+	"info": {
+		"_postman_id": "4245c8be-cfa5-4a3c-a7ba-dc6fd631fb00",
+		"name": "tellme-org",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18886029"
+	},
+	"item": [
+		{
+			"name": "heimdall",
+			"item": [
+				{
+					"name": "/ heimdall",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api-gateway}}/",
+							"host": [
+								"{{api-gateway}}"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "health",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Heimdall is healthy\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    const jsonData = pm.response.json();\r",
+									"    if (jsonData.data) {\r",
+									"        pm.expect(jsonData.data.status.toLowerCase()).to.include(\"ok\");\r",
+									"    }else{\r",
+									"        pm.expect(jsonData.status.toLowerCase()).to.include(\"ok\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api-gateway}}/health",
+							"host": [
+								"{{api-gateway}}"
+							],
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ping",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// check response\r",
+									"pm.test(\"Response contains Pong\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    // if response is json, check if data contains \"pong\"\r",
+									"    try {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        if (jsonData && jsonData.data) {\r",
+									"            pm.expect(jsonData.data.toString().toLowerCase()).to.include(\"pong\");\r",
+									"        }\r",
+									"    } catch (e) {\r",
+									"        const responseBody = pm.response.text();     \r",
+									"        // check if response contain \"pong\" (insensible case)\r",
+									"        pm.expect(responseBody.toLowerCase()).to.include(\"pong\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api-gateway}}/ping",
+							"host": [
+								"{{api-gateway}}"
+							],
+							"path": [
+								"ping"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/admin/stats",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api-gateway}}/{{api-version}}/admin/stats",
+							"host": [
+								"{{api-gateway}}"
+							],
+							"path": [
+								"{{api-version}}",
+								"admin",
+								"stats"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "cerberus",
+			"item": [
+				{
+					"name": "auth",
+					"item": [
+						{
+							"name": "/auth/register",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Status code should be 201 (Created) or 409 (Conflict)\r",
+											"pm.test(\"Status code is 201 or 409\", function () {\r",
+											"    pm.expect(pm.response.code).to.be.oneOf([201, 409]);\r",
+											"});\r",
+											"\r",
+											"let jsonData = pm.response.json();\r",
+											"\r",
+											"// User created successfully\r",
+											"if (pm.response.code === 201) {\r",
+											"    let user = jsonData.data ? jsonData.data : jsonData;\r",
+											"\r",
+											"    pm.test(\"id is a string\", function () {\r",
+											"        pm.expect(user.id).to.be.a(\"string\");\r",
+											"    });\r",
+											"\r",
+											"    pm.test(\"isBot is a boolean\", function () {\r",
+											"        pm.expect(user.isBot).to.be.a(\"boolean\");\r",
+											"    });\r",
+											"}\r",
+											"\r",
+											"// User already exist?\r",
+											"if (pm.response.code === 409) {\r",
+											"    let errors = jsonData.errors ? jsonData.errors : jsonData;\r",
+											"    pm.test(\"Error response has required fields\", function () {\r",
+											"        // pm.expect(errors).to.have.property(\"message\", \"Username or email already exists.\");\r",
+											"        pm.expect(errors).to.have.property(\"error\", \"Conflict\");\r",
+											"        pm.expect(errors).to.have.property(\"statusCode\", 409);\r",
+											"        pm.expect(errors.message.toLowerCase()).to.include(\"already exists\");\r",
+											"    });\r",
+											"}\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\" : \"username\",\r\n    \"email\" : \"test@test.fr\",\r\n    \"password\" : \"paSSword123*\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api-auth-service}}{{api-version}}/auth/register",
+									"host": [
+										"{{api-auth-service}}{{api-version}}"
+									],
+									"path": [
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/auth/login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status should be 200 or 401\", function () {\r",
+											"    pm.expect([200, 401]).to.include(pm.response.code);\r",
+											"});\r",
+											"\r",
+											"if (pm.response.code === 200) {\r",
+											"    const res = pm.response.json();\r",
+											"    pm.test(\"AccessToken should be defined\", function () {\r",
+											"        pm.expect(res.data).to.have.property(\"accessToken\");\r",
+											"        pm.expect(res.data.accessToken).to.be.a(\"string\").and.not.empty;\r",
+											"    });\r",
+											"\r",
+											"    pm.test(\"RefreshToken should be defined\", function () {\r",
+											"        pm.expect(res.data).to.have.property(\"refreshToken\");\r",
+											"        pm.expect(res.data.refreshToken).to.be.a(\"string\").and.not.empty;\r",
+											"    });\r",
+											"\r",
+											"    pm.test(\"TokenType should be Bearer\", function () {\r",
+											"        pm.expect(res.data.tokenType).to.eql(\"Bearer\");\r",
+											"    });\r",
+											"    \r",
+											"    // 🔄 Save tokens to collection variables\r",
+											"    pm.collectionVariables.set(\"accessToken\", res.data.accessToken);\r",
+											"    pm.collectionVariables.set(\"refreshToken\", res.data.refreshToken);\r",
+											"\r",
+											"    console.log(\"✅ Tokens updated in collection variables from login\");\r",
+											"\r",
+											"} "
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"usernameOrEmail\" : \"test@test.fr\",\r\n    \"password\" : \"paSSword123*\"\r\n    // \"password\" : \"paSSword12sbadss3*\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api-auth-service}}{{api-version}}/auth/login",
+									"host": [
+										"{{api-auth-service}}{{api-version}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/auth/bot/login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status should be 200 or 401\", function () {\r",
+											"    pm.expect([200, 401]).to.include(pm.response.code);\r",
+											"});\r",
+											"\r",
+											"if (pm.response.code === 200) {\r",
+											"    const res = pm.response.json();\r",
+											"    pm.test(\"AccessToken should be defined\", function () {\r",
+											"        pm.expect(res.data).to.have.property(\"accessToken\");\r",
+											"        pm.expect(res.data.accessToken).to.be.a(\"string\").and.not.empty;\r",
+											"    });\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\" : \"85764101384441856\",\r\n    \"clientSecret\" : \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api-auth-service}}{{api-version}}/auth/bot/login",
+									"host": [
+										"{{api-auth-service}}{{api-version}}"
+									],
+									"path": [
+										"auth",
+										"bot",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/auth/refresh",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status should be 200 or 403\", function () {\r",
+											"    pm.expect([200, 403]).to.include(pm.response.code);\r",
+											"});\r",
+											"\r",
+											"if (pm.response.code === 200) {\r",
+											"    const res = pm.response.json();\r",
+											"\r",
+											"    pm.test(\"Response success should be true\", function () {\r",
+											"        pm.expect(res.success).to.eql(true);\r",
+											"    });\r",
+											"\r",
+											"    pm.test(\"AccessToken should be defined\", function () {\r",
+											"        pm.expect(res.data).to.have.property(\"accessToken\");\r",
+											"        pm.expect(res.data.accessToken).to.be.a(\"string\").and.not.empty;\r",
+											"    });\r",
+											"\r",
+											"    pm.test(\"RefreshToken should be defined\", function () {\r",
+											"        pm.expect(res.data).to.have.property(\"refreshToken\");\r",
+											"        pm.expect(res.data.refreshToken).to.be.a(\"string\").and.not.empty;\r",
+											"    });\r",
+											"\r",
+											"    pm.test(\"TokenType should be Bearer\", function () {\r",
+											"        pm.expect(res.data.tokenType).to.eql(\"Bearer\");\r",
+											"    });\r",
+											"\r",
+											"    // 🔄 Update environment variables\r",
+											"    pm.environment.set(\"accessToken\", res.data.accessToken);\r",
+											"    pm.environment.set(\"refreshToken\", res.data.refreshToken);\r",
+											"\r",
+											"    console.log(\"✅ Tokens updated in environment variables from refresh\");\r",
+											"\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"refreshToken\" : \"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4NTk5ODg4NTA2NzAzNDYyNCIsImVtYWlsIjoidGVzdEB0ZXN0LmZyIiwiY2xpZW50IjoidXNlciIsInR5cGUiOiJyZWZyZXNoIiwianRpIjoiNmQyMDk4NjUtNDAzNi00MjI4LWIyMzAtOWNjMDY4NGNjMTQ1IiwiYWlkIjoiOWI4MGMxZTgtYzUzMy00YWYzLTkzYjctZTIzZDViMmMwOWRjIiwiaWF0IjoxNzU3MDc3OTk1LCJleHAiOjE3NTk2Njk5OTV9.ZEFXBSxNlCH2Mq4U0kJczPfvEZoAIB2Cqxbin2QFE3gwvm005Xu9nhYtEQ9n4eXTQN-o_FZU-gdC8-5XTB1fH5Vg7anZkKPOirY_JBSrmUc2nO5IWgxVQLWXRSBdMUFMZKH8tNIt1kuckSqHf9XW0SJByvAi7G52DYUT88CJ6uCT5CVwlJlO8rr_aT1CHCHJttXZP-Smlqmc-ljdJ4-r_LU_fnu-ttR21adwdWYcUiBTa9GTwZLucn3xZyrL_uV2al88hRVrFPsYGApwfZW-GNZ1irQbcrwk_MSF_kUvAmdrGjXAR0f4B316vrOUG0Da-PWgzLOFP-5CTxzo7EqcCiTis7-m9d3ByY3-0RQxMFIRCb_H0YorltXt7I2LdbkmBYwsH9awhIBZwBuEu63Mb9jBbzvTRpT6hHJiJMXxTVwomBOqpV_9GoISIWW5RZWlhyTAiqo8Fjy9v-FY5CwndFL_Qfiw4Jmc3j38WMKHCpqMw2o0RUxI0FeqLaLf-IVXLOq1vHWxA4hJuTDhynCzkidpNeq_ivi1obhVtH6IECmMlltn_87aISi5sa_iIBKYHwrS8yVW18pzaA8WwNPQ8Cjig8CFCM3y0HRxhHpssMBeNnBW_6K5IgZGhllg7xibskay9Wk_1ZbgNVIj89sg7JiLY0GOUGfy3LLNx4XVQAw\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api-auth-service}}{{api-version}}/auth/refresh",
+									"host": [
+										"{{api-auth-service}}{{api-version}}"
+									],
+									"path": [
+										"auth",
+										"refresh"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/auth/logout",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api-auth-service}}{{api-version}}/auth/logout",
+									"host": [
+										"{{api-auth-service}}{{api-version}}"
+									],
+									"path": [
+										"auth",
+										"logout"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/ cerberus",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api-auth-service}}{{api-version}}/auth/",
+							"host": [
+								"{{api-auth-service}}{{api-version}}"
+							],
+							"path": [
+								"auth",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "health auth",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Cerberus is healthy\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    const jsonData = pm.response.json();\r",
+									"    if (jsonData.data) {\r",
+									"        pm.expect(jsonData.data.status.toLowerCase()).to.include(\"ok\");\r",
+									"    }else{\r",
+									"        pm.expect(jsonData.status.toLowerCase()).to.include(\"ok\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api-auth-service}}{{api-version}}/auth/health",
+							"host": [
+								"{{api-auth-service}}{{api-version}}"
+							],
+							"path": [
+								"auth",
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ping auth",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// check response\r",
+									"pm.test(\"Response contains Pong\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    // if response is json, check if data contains \"pong\"\r",
+									"    try {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        if (jsonData && jsonData.data) {\r",
+									"            pm.expect(jsonData.data.toString().toLowerCase()).to.include(\"pong\");\r",
+									"        }\r",
+									"    } catch (e) {\r",
+									"        const responseBody = pm.response.text();     \r",
+									"        // check if response contain \"pong\" (insensible case)\r",
+									"        pm.expect(responseBody.toLowerCase()).to.include(\"pong\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api-auth-service}}{{api-version}}/auth/ping",
+							"host": [
+								"{{api-auth-service}}{{api-version}}"
+							],
+							"path": [
+								"auth",
+								"ping"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "atlas",
+			"item": [
+				{
+					"name": "users",
+					"item": [
+						{
+							"name": "interne",
+							"item": []
+						},
+						{
+							"name": "users create",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Status code should be 201 (Created) or 409 (Conflict)\r",
+											"pm.test(\"Status code is 201 or 409\", function () {\r",
+											"    pm.expect(pm.response.code).to.be.oneOf([201, 409]);\r",
+											"});\r",
+											"\r",
+											"let jsonData = pm.response.json();\r",
+											"\r",
+											"// User created successfully\r",
+											"if (pm.response.code === 201) {\r",
+											"    let user = jsonData.data ? jsonData.data : jsonData;\r",
+											"\r",
+											"    pm.test(\"id is a string\", function () {\r",
+											"        pm.expect(user.id).to.be.a(\"string\");\r",
+											"    });\r",
+											"\r",
+											"    pm.test(\"isBot is a boolean\", function () {\r",
+											"        pm.expect(user.isBot).to.be.a(\"boolean\");\r",
+											"    });\r",
+											"}\r",
+											"\r",
+											"// User already exist?\r",
+											"if (pm.response.code === 409) {\r",
+											"    let errors = jsonData.errors ? jsonData.errors : jsonData;\r",
+											"    pm.test(\"Error response has required fields\", function () {\r",
+											"        // pm.expect(errors).to.have.property(\"message\", \"Username or email already exists.\");\r",
+											"        pm.expect(errors).to.have.property(\"error\", \"Conflict\");\r",
+											"        pm.expect(errors).to.have.property(\"statusCode\", 409);\r",
+											"        pm.expect(errors.message.toLowerCase()).to.include(\"already exists\");\r",
+											"    });\r",
+											"}\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\" : \"username\",\r\n    \"email\" : \"test@test.fr\",\r\n    \"password\" : \"paSSword123*\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api-users-service-interne}}/users/",
+									"host": [
+										"{{api-users-service-interne}}"
+									],
+									"path": [
+										"users",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "users checkLogin",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status should be 200 or 401\", function () {\r",
+											"    pm.expect([200, 401]).to.include(pm.response.code);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"usernameOrEmail\" : \"username\", // username or email\r\n    // \"usernameOrEmail\" : \"test@test.fr\",\r\n    \"password\" : \"paSSword123*\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api-users-service-interne}}/users/check/login",
+									"host": [
+										"{{api-users-service-interne}}"
+									],
+									"path": [
+										"users",
+										"check",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "users checkLoginBot",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\" : \"85764101384441856\", // id of bot\r\n    \"token\" : \"\" // token of bot\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api-users-service-interne}}/users/check/login/bot",
+									"host": [
+										"{{api-users-service-interne}}"
+									],
+									"path": [
+										"users",
+										"check",
+										"login",
+										"bot"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "users me",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    // information of user like username, bio, avatar_rl etc.\r\n    \"username\" : \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api-users-service}}{{api-version}}/users/me",
+									"host": [
+										"{{api-users-service}}{{api-version}}"
+									],
+									"path": [
+										"users",
+										"me"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "users me",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api-users-service}}{{api-version}}/users/me",
+									"host": [
+										"{{api-users-service}}{{api-version}}"
+									],
+									"path": [
+										"users",
+										"me"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "users me",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api-users-service}}{{api-version}}/users/me",
+									"host": [
+										"{{api-users-service}}{{api-version}}"
+									],
+									"path": [
+										"users",
+										"me"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "users getById",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.response.to.have.status(200);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api-users-service}}{{api-version}}/users/85764101384441856/?full=",
+									"host": [
+										"{{api-users-service}}{{api-version}}"
+									],
+									"path": [
+										"users",
+										"85764101384441856",
+										""
+									],
+									"query": [
+										{
+											"key": "full",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "users search",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api-users-service}}{{api-version}}/users?term=username",
+									"host": [
+										"{{api-users-service}}{{api-version}}"
+									],
+									"path": [
+										"users"
+									],
+									"query": [
+										{
+											"key": "term",
+											"value": "username"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/ atlas",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api-users-service}}{{api-version}}/atlas/",
+							"host": [
+								"{{api-users-service}}{{api-version}}"
+							],
+							"path": [
+								"atlas",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "health atlas",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Atlas is healthy\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    const jsonData = pm.response.json();\r",
+									"    if (jsonData.data) {\r",
+									"        pm.expect(jsonData.data.status.toLowerCase()).to.include(\"ok\");\r",
+									"    }else{\r",
+									"        pm.expect(jsonData.status.toLowerCase()).to.include(\"ok\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api-users-service}}{{api-version}}/atlas/health",
+							"host": [
+								"{{api-users-service}}{{api-version}}"
+							],
+							"path": [
+								"atlas",
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ping atlas",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// check response\r",
+									"pm.test(\"Response contains Pong\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    // if response is json, check if data contains \"pong\"\r",
+									"    try {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        if (jsonData && jsonData.data) {\r",
+									"            pm.expect(jsonData.data.toString().toLowerCase()).to.include(\"pong\");\r",
+									"        }\r",
+									"    } catch (e) {\r",
+									"        const responseBody = pm.response.text();     \r",
+									"        // check if response contain \"pong\" (insensible case)\r",
+									"        pm.expect(responseBody.toLowerCase()).to.include(\"pong\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api-users-service}}{{api-version}}/atlas/ping",
+							"host": [
+								"{{api-users-service}}{{api-version}}"
+							],
+							"path": [
+								"atlas",
+								"ping"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{accessToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "accessToken",
+			"value": ""
+		},
+		{
+			"key": "refreshToken",
+			"value": "",
+			"description": {
+				"content": "",
+				"type": "text/plain"
+			}
+		},
+		{
+			"key": "api-gateway",
+			"value": "http://localhost:3000"
+		},
+		{
+			"key": "api-auth-service",
+			"value": "http://localhost:3001",
+			"description": {
+				"content": "",
+				"type": "text/plain"
+			}
+		},
+		{
+			"key": "api-users-service",
+			"value": "http://localhost:3002",
+			"description": {
+				"content": "",
+				"type": "text/plain"
+			}
+		},
+		{
+			"key": "api-users-service-interne",
+			"value": "http://localhost:3002",
+			"description": {
+				"content": "",
+				"type": "text/plain"
+			}
+		},
+		{
+			"key": "api-version",
+			"value": "/api",
+			"description": {
+				"content": "",
+				"type": "text/plain"
+			}
+		}
+	]
+}
