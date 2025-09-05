@@ -4,6 +4,7 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
+    "prune": "npx turbo prune --scope=heimdall --out-dir=prune/heimdall --docker && npx turbo prune --scope=cerberus --out-dir=prune/cerberus --docker && npx turbo prune --scope=atlas --out-dir=prune/atlas --docker",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types"
